@@ -48,7 +48,7 @@ jobs:
           
           ${{ github.event.head_commit.message }}
           
-          ## Ğ£ÑéºÍ
-          | ÎÄ¼şÃû | SHA256 |
+          ## æ ¡éªŒå’Œ
+          | æ–‡ä»¶å | SHA256 |
           | :- | :- |
           | WindowsFormsApp1.zip | ${{ env.WindowsFormsApp1_SHA256 }} |
