@@ -50,13 +50,13 @@ jobs:
       run: |
         .\BUILD.ps1
         New-Item -ItemType Directory -Path C:\builtfiles -Force > $null
-        Compress-Archive -Path WindowsFormsApp1\bin\x64\Release\win-x64\* -DestinationPath C:\builtfiles\WindowsFormsApp1.zip
+        Compress-Archive -Path WindowsFormsApp1\bin\* -DestinationPath C:\builtfiles\WindowsFormsApp1.zip
         echo "::set-env name=WindowsFormsApp1_SHA256::$(.\GetSHA256.ps1 C:\builtfiles\WindowsFormsApp1.zip)"
     - name: Upload
       uses: actions/upload-artifact@v1
       with:
         name: WindowsFormsApp1
-        path: WindowsFormsApp1\bin\x64\Release\win-x64
+        path: WindowsFormsApp1\bin
   
     - name: Release
       uses: softprops/action-gh-release@v1
