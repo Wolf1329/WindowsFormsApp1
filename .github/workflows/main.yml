@@ -50,13 +50,13 @@ jobs:
       run: |
         .\BUILD.ps1
         New-Item -ItemType Directory -Path C:\builtfiles -Force > $null
-        Compress-Archive -Path Netch\bin\x64\Release\win-x64\* -DestinationPath C:\builtfiles\Netch.zip
-        echo "::set-env name=Netch_SHA256::$(.\GetSHA256.ps1 C:\builtfiles\Netch.zip)"
+        Compress-Archive -Path WindowsFormsApp1\bin\x64\Release\win-x64\* -DestinationPath C:\builtfiles\WindowsFormsApp1.zip
+        echo "::set-env name=WindowsFormsApp1_SHA256::$(.\GetSHA256.ps1 C:\builtfiles\WindowsFormsApp1.zip)"
     - name: Upload
       uses: actions/upload-artifact@v1
       with:
-        name: Netch
-        path: Netch\bin\x64\Release\win-x64
+        name: WindowsFormsApp1
+        path: WindowsFormsApp1\bin\x64\Release\win-x64
   
     - name: Release
       uses: softprops/action-gh-release@v1
@@ -68,12 +68,12 @@ jobs:
         prerelease: true
         draft: false
         files: |
-          C:\builtfiles\Netch.zip
+          C:\builtfiles\WindowsFormsApp1.zip
         body: |
-          [![](https://img.shields.io/badge/Telegram-Channel-blue)](https://t.me/Netch) [![](https://img.shields.io/badge/Telegram-Group-green)](https://t.me/Netch_Discuss_Group)
+          [![](https://img.shields.io/badge/Telegram-Channel-blue)](https://t.me/WindowsFormsApp1) [![](https://img.shields.io/badge/Telegram-Group-green)](https://t.me/WindowsFormsApp1_Discuss_Group)
           ## 更新日志
           * 这是 GitHub Action 自动化部署，更新日志应该很快会手动更新 复制的代码
           ## 校验和
           | 文件名 | SHA256 |
           | :- | :- |
-          | Netch.zip | ${{ env.Netch_SHA256 }} |
+          | WindowsFormsApp1.zip | ${{ env.WindowsFormsApp1_SHA256 }} |
