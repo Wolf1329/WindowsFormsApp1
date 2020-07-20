@@ -1,0 +1,79 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  watch:
+    types: [started]
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    name:Build
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    - name: NuGet
+      uses: nuget/setup-nuget@v1
+    
+    - name: MSBuild
+      uses: microsoft/setup-msbuild@v1.0.0
+
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Checkout
+      uses: actions/checkout@v2
+
+
+    # Runs a single command using the runners shell
+    - name: Run a one-line script
+      run: echo Hello, world!
+
+    # Runs a set of commands using the runners shell
+    - name: Run a multi-line script
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
+
+    - name: Restore NuGet Package
+      run: nuget restore WindowsFormsApp1.sln
+
+    - name: Build .NET 4.0
+      shell: pwsh
+      run: |
+        .\BUILD.ps1
+        New-Item -ItemType Directory -Path C:\builtfiles -Force > $null
+        Compress-Archive -Path Netch\bin\x64\Release\win-x64\* -DestinationPath C:\builtfiles\Netch.zip
+        echo "::set-env name=Netch_SHA256::$(.\GetSHA256.ps1 C:\builtfiles\Netch.zip)"
+    - name: Upload
+      uses: actions/upload-artifact@v1
+      with:
+        name: Netch
+        path: Netch\bin\x64\Release\win-x64
+  
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        name: ${{ env.GITHUB_TAG_NAME }}
+        prerelease: true
+        draft: false
+        files: |
+          C:\builtfiles\Netch.zip
+        body: |
+          [![](https://img.shields.io/badge/Telegram-Channel-blue)](https://t.me/Netch) [![](https://img.shields.io/badge/Telegram-Group-green)](https://t.me/Netch_Discuss_Group)
+          ## 更新日志
+          * 这是 GitHub Action 自动化部署，更新日志应该很快会手动更新 复制的代码
+          ## 校验和
+          | 文件名 | SHA256 |
+          | :- | :- |
+          | Netch.zip | ${{ env.Netch_SHA256 }} |
