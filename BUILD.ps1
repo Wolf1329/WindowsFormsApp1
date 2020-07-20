@@ -17,7 +17,7 @@ function Build-NetFrameworkx64
 	$outdir = "$net_baseoutput\x64"
 
 	#msbuild -v:m -m -t:Build /p:Configuration="Release" /p:Platform="x64" /p:TargetFramework=net40 /p:Runtimeidentifier=win-x64 /restore
-	sbuild -v:m -m -t:Build /p:Configuration="Release" /p:Platform="x64" /p:TargetFramework=net40 /restore
+	msbuild  -v:m -m -t:Build /p:Configuration="Release" /p:Platform="x64" /p:TargetFramework=net40 /restore
 	if ($LASTEXITCODE) { cd $mainDir ; exit $LASTEXITCODE } 
 
     Write-Host 'Build x64 Completed, start copy bin, mode, i18n file'
